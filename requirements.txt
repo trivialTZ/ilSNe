@@ -1,0 +1,12 @@
+# Core runtime dependencies
+numpy
+pandas
+matplotlib
+astropy
+pytest
+
+# Pantheon+ pivot backend (required for PantheonPivotBlock)
+hierarc>=1.1
+
+# Track latest slsim from GitHub main branch (used by ilsne.slsim_yields)
+slsim @ git+https://github.com/LSST-strong-lensing/slsim.git@main
