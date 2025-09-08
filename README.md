@@ -41,7 +41,7 @@ $$
 The last term implements \$\mu' = \mu/\lambda^2\$. Observed magnitudes are modeled as
 
 $$
-m_i^{\mathrm{obs}} = m_i^{\mathrm{pred}} + \epsilon_i,\qquad \epsilon_i \sim \mathcal N\!\left(0,\; \sigma_{i}^2\right),
+m_i^{\mathrm{obs}} = m_i^{\mathrm{pred}} + \epsilon_i,\qquad   \mathcal \epsilon_i \sim \mathcal N(0, \sigma_i^2),
 $$
 
 with per-image variance
@@ -62,10 +62,10 @@ Assume a Gaussian prior on the pivot \$m\_p \sim \mathcal N(m\_{p,\mathrm{mean}}
 
 $$
 \begin{aligned}
- a &= \mathbf 1^\top S^{-1}\mathbf 1 + \sigma_{m_p}^{-2},\\
- b &= \mathbf 1^\top S^{-1}\mathbf r + m_{p,\mathrm{mean}}\,\sigma_{m_p}^{-2},\\
- c &= \mathbf r^\top S^{-1}\mathbf r + m_{p,\mathrm{mean}}^2\,\sigma_{m_p}^{-2},\\[4pt]
- \log\mathcal L_\mathrm{marg}(\lambda) &= -\tfrac12\Big(c - \tfrac{b^2}{a}\Big) - \tfrac12\log a.
+ a &= \mathbf 1^\top S^{-1}\mathbf 1 + \sigma_{m_p}^{-2}, \\
+ b &= \mathbf 1^\top S^{-1}\mathbf r + m_{p,\mathrm{mean}}\,\sigma_{m_p}^{-2}, \\
+ c &= \mathbf r^\top S^{-1}\mathbf r + m_{p,\mathrm{mean}}^2\,\sigma_{m_p}^{-2}, \\
+ \log \mathcal L_\mathrm{marg}(\lambda) &= -\tfrac12\Big(c - \tfrac{b^2}{a}\Big) - \tfrac12\log a.
 \end{aligned}
 $$
 
@@ -88,7 +88,8 @@ These controls enable sensitivity studies on how microlensing assumptions shift 
 External convergence induces an effective MST: \$\lambda\_\mathrm{tot} = (1 - \kappa\_\mathrm{ext}),\lambda\_\mathrm{int}\$. We transform posteriors via LOS sampling:
 
 $$
-p(\lambda_\mathrm{int}) = \int p(\lambda_\mathrm{tot})\,p(\kappa_\mathrm{ext})\, \delta\!\left(\lambda_\mathrm{tot} - (1-\kappa_\mathrm{ext})\lambda_\mathrm{int}\right)\,\mathrm d\kappa_\mathrm{ext}.
+p(\lambda_\mathrm{int}) = \int p(\lambda_\mathrm{tot})\,p(\kappa_\mathrm{ext})\,
+\delta \big(\lambda_\mathrm{tot} - (1-\kappa_\mathrm{ext})\lambda_\mathrm{int}\big)\, \mathrm d\kappa_\mathrm{ext}.
 $$
 
 Implementation draws \$\kappa\_\mathrm{ext}\$ from SLSim when available or a Gaussian fallback and applies the Jacobian \$(1-\kappa\_\mathrm{ext})\$. See `src/ilsne/los_posterior.py` and `src/ilsne/los.py`.
@@ -161,7 +162,7 @@ print(post["lam_mean"], post["lam_std"])  # ≈ λ ± σ(λ)
 
 See the notebook for a fuller workflow including stacking and LOS handling.
 
-## Project Potential and Roadmap
+## Next stop
 
 - Hierarchical λ with realistic priors: move from the demo’s simple random‑effects model to a full hierarchical Bayesian treatment with selection functions and microlensing hyper‑priors.
 - Joint ilSN + slSN analysis: combine λ posteriors with slSN Δt likelihoods (e.g., via a TDMag block) for end‑to‑end H0 inference.
