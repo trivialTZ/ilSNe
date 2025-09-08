@@ -12,6 +12,7 @@ from .pivot import (
     m_sn_from_pivot,
     predict_unlensed_mag,
     profile_m_p_gaussian_prior,
+    resolve_cosmology,
 )
 from .sensitivity import sweep_sigma_micro_params, sweep_sigma_micro_scale
 from .stacking import (
@@ -29,6 +30,7 @@ __all__ = [
     "m_sn_from_pivot",
     "predict_unlensed_mag",
     "profile_m_p_gaussian_prior",
+    "resolve_cosmology",
     "LensedSN",
     "LensDataset",
     "infer_lambda_for_lens",

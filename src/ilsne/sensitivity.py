@@ -18,7 +18,7 @@ from .pivot import FlatLCDM
 
 def sweep_sigma_micro_params(
     lens: LensDataset,
-    cosmo: FlatLCDM,
+    cosmo: FlatLCDM | object,
     z_pivot: float,
     mp_mean: float,
     mp_sigma: float,
@@ -40,7 +40,7 @@ def sweep_sigma_micro_params(
     ----------
     lens : LensDataset
         Lensed SN dataset.
-    cosmo : FlatLCDM
+    cosmo : FlatLCDM or astropy.cosmology.Cosmology
         Cosmology model.
     z_pivot : float
         Pivot redshift anchoring ``m_p``.
@@ -89,7 +89,7 @@ def sweep_sigma_micro_params(
 
 def sweep_sigma_micro_scale(
     lens: LensDataset,
-    cosmo: FlatLCDM,
+    cosmo: FlatLCDM | object,
     z_pivot: float,
     mp_mean: float,
     mp_sigma: float,
@@ -104,7 +104,7 @@ def sweep_sigma_micro_scale(
     ----------
     lens : LensDataset
         Lensed SN dataset.
-    cosmo : FlatLCDM
+    cosmo : FlatLCDM or astropy.cosmology.Cosmology
         Cosmology model.
     z_pivot : float
         Pivot redshift anchoring ``m_p``.

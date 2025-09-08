@@ -16,7 +16,7 @@ from typing import Any
 
 import numpy as np
 
-from .pivot import FlatLCDM
+from .pivot import FlatLCDM, distmod
 
 
 @dataclass
@@ -66,7 +66,7 @@ def _loglike_marg_mp(
     m_obs: Sequence[float] | np.ndarray,
     sigma_m: Sequence[float] | np.ndarray,
     lam: float,
-    cosmo: FlatLCDM,
+    cosmo: FlatLCDM | object,
     z_pivot: float,
     mp_mean: float,
     mp_sigma: float,
@@ -88,8 +88,8 @@ def _loglike_marg_mp(
         Per-SN redshift, model magnification, observed magnitude and uncertainty.
     lam : float
         Trial value of the mass-sheet scaling :math:`\lambda`.
-    cosmo : FlatLCDM
-        Cosmology model.
+    cosmo : FlatLCDM or astropy.cosmology.Cosmology
+        Cosmology model used for distance-modulus differences.
     z_pivot : float
         Pivot redshift anchoring :math:`m_p`.
     mp_mean, mp_sigma : float
@@ -113,7 +113,8 @@ def _loglike_marg_mp(
         and np.all(np.isfinite(sigma_m))
     ):
         raise ValueError("Non-finite inputs to _loglike_marg_mp")
-    dmu = np.array([cosmo.distance_modulus(zi) - cosmo.distance_modulus(z_pivot) for zi in z])
+    # Support either local FlatLCDM or any astropy.cosmology cosmology
+    dmu = np.asarray(distmod(cosmo, z)) - float(distmod(cosmo, float(z_pivot)))
     model = dmu - 2.5 * np.log10(mu_model) + 5.0 * np.log10(lam)
     Cinv = np.diag(1.0 / np.maximum(sigma_m, 1e-12) ** 2)
     one = np.ones_like(z)
@@ -166,7 +167,7 @@ def _posterior_1d(
 
 def infer_lambda_for_lens(
     lens: LensDataset,
-    cosmo: FlatLCDM,
+    cosmo: FlatLCDM | object,
     z_pivot: float,
     mp_mean: float,
     mp_sigma: float,
@@ -182,7 +183,7 @@ def infer_lambda_for_lens(
     ----------
     lens : LensDataset
         Dataset of lensed SNe.
-    cosmo : FlatLCDM
+    cosmo : FlatLCDM or astropy.cosmology.Cosmology
         Cosmology model.
     z_pivot : float
         Pivot redshift for the SN magnitude anchor.

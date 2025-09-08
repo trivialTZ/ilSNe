@@ -11,12 +11,12 @@ from collections.abc import Callable
 import numpy as np
 
 from .magnification import LensDataset
-from .pivot import FlatLCDM
+from .pivot import FlatLCDM, distmod
 
 
 def diagnose_lambda_bias(
     lens: LensDataset,
-    cosmo: FlatLCDM,
+    cosmo: FlatLCDM | object,
     z_pivot: float,
     mp_mean: float,
     sigma_int: float = 0.0,
@@ -28,7 +28,7 @@ def diagnose_lambda_bias(
     ----------
     lens : LensDataset
         Per-lens supernova measurements and model magnifications.
-    cosmo : FlatLCDM
+    cosmo : FlatLCDM or astropy.cosmology.Cosmology
         Cosmology used to compute distance-modulus differences.
     z_pivot : float
         Pivot redshift anchoring the magnitude zero-point.
@@ -64,7 +64,8 @@ def diagnose_lambda_bias(
         s_micro = np.zeros_like(z)
     s = np.sqrt(s0**2 + sigma_int**2 + s_micro**2)
 
-    dmu = np.array([cosmo.distance_modulus(zi) - cosmo.distance_modulus(z_pivot) for zi in z])
+    # Support either local FlatLCDM or any astropy.cosmology cosmology
+    dmu = np.asarray(distmod(cosmo, z)) - float(distmod(cosmo, float(z_pivot)))
     model_wo_mp = dmu - 2.5 * np.log10(mu)  # λ=1
     r = m - model_wo_mp  # this is d' in the derivation
 
